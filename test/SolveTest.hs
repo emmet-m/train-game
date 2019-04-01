@@ -13,8 +13,6 @@ solveTest =
       && 
       solve [Num 3, Num 2, Num 4, Op Mi, Op Mi] == Just 5
 
-
-
 {-
     describe "Addition" $ do
       it "should add 2 numbers normally" $ do
