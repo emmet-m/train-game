@@ -1,0 +1,50 @@
+name:                train-game
+version:             0.1.0.0
+github:              "emmet-m/train-game"
+license:             BSD3
+author:              "Emmet Murray,"
+maintainer:          "e.minor.murray@gmail.com,"
+copyright:           "None,"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            None,
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/emmet-m/train-game#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  train-game-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - train-game
+
+tests:
+  train-game-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - train-game
+    - QuickCheck >= 2.12 
+    - hspec >= 2.6
