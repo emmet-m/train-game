@@ -18,5 +18,5 @@ solveTest =
       solve [Num 3, Num 1, Op Di, Num 3, Op Pl] == Just 6
     it "1 * (1 / 1) == 1" $ do
       solve [Num 1, Num 1, Op Di, Num 1, Op Mu] == Just 1
-    it "1 / 0 == Undefined" $ do
+    it "1 / 0 == Nothing" $ do
       solve [Num 1, Num 0, Op Di] == Nothing

@@ -4,6 +4,7 @@ module TrainGame
   ( solve,
     findSolutions,
     buildRpn,
+    showRpn,
     solutions,
     RPN (Op, Num),
     OperatorType (Pl, Mi, Mu, Di)
@@ -11,8 +12,23 @@ module TrainGame
 
 import Data.List (permutations)
 
-data OperatorType = Pl | Mi | Mu | Di deriving (Eq, Show)
-data RPN = Op OperatorType | Num Integer deriving Show
+data OperatorType = Pl | Mi | Mu | Di deriving Eq
+instance Show OperatorType where
+  show Pl = " + "
+  show Mi = " - "
+  show Mu = " * "
+  show Di = " / "
+
+data RPN = Op OperatorType | Num Integer
+
+-- Allows us to show an RPN equation as a regular equation
+showRpn :: [RPN] -> String
+showRpn xs = showRpn' xs []
+  where
+    showRpn' :: [RPN] -> [String] -> String
+    showRpn' ((Num n):xs) st      = showRpn' xs ((show n):st)
+    showRpn' ((Op o):[]) (a:b:st) = b ++ show o ++ a
+    showRpn' ((Op o):xs) (a:b:st) = showRpn' xs (("(" ++ b ++ show o ++ a ++ ")"):st)
 
 operators :: [RPN] 
 operators = [Op Pl, Op Mi, Op Mu, Op Di]
@@ -64,7 +80,9 @@ solve rpn = solve' rpn []
 
     safeOp :: OperatorType -> Integer -> Integer -> (Integer -> Maybe Integer) -> Maybe Integer
     safeOp o a b f = 
-      if (o == Di && a == 0)
+      -- Skip if going to divide by 0
+      -- Skip if a does not divide b evenly
+      if (o == Di && (a == 0 || b `mod` a /= 0))
         then Nothing
         else f $ (mapOperator o) b a
       
