@@ -4,9 +4,9 @@
 
 The train game is a game you play with the id number of a train/bus. For example:
 
-![Train Carriage Number](https://medium.com/@matthewegan/the-sydney-train-carriage-problem-cf681c96668)
+![Train Carriage Number](https://goughlui.com/wp-content/uploads/2013/09/20130904_075855.jpg)
 
-(Photo taken from [this Medium article](https://medium.com/@matthewegan/the-sydney-train-carriage-problem-cf681c96668), that also solved the train game!)
+(Credit to [this website](https://goughlui.com/2013/09/08/weekend-soup-pot-post-politics-rail-observations-etc/) for the photo!)
 
 Using those 4 numbers and the operators `+ - *` and `/` to create the number `10`.
 
