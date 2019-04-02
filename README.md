@@ -18,6 +18,8 @@ For example, using `1234`:
 
 And there may be many more solutions.
 
+You must use each number at most once and at least once!
+
 ## What does this project do?
 
 This project finds all the solutions to a particular train game problem :)
@@ -39,3 +41,9 @@ To run the project:
 ```
 stack exec train-game-exe -- *Intert 4 numbers here*
 ```
+
+## Current issues
+* Some solutions are 'identical', but get printed twice because the operation order is different. For example, solving `3577` gives us:
+  * 5 * (3 - (7 / 7))
+  * (3 - (7 / 7)) * 5
+* Having two of the same number means solutions are equivalent, but treated as two seperate solutions
