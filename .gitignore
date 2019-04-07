@@ -1,3 +1,4 @@
 .stack-work/
 train-game.cabal
 *~
+train-game-exe
