@@ -6,9 +6,8 @@ import System.Environment
 main :: IO ()
 main = do
   args <- getArgs
-  if length args /= 4 then
-    putStrLn "Usage: ./trainGame [0-9] [0-9] [0-9] [0-9]" 
+  if length args <= 1 then
+    putStrLn "Usage: ./trainGame [0-9] [0-9]+" 
   else
     let numbers = map (\x -> read x :: Integer) args in
-    mapM_ putStrLn $ map showRpn (solutions numbers)
-  
+    mapM_ putStrLn $ solutions numbers

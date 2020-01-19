@@ -4,13 +4,13 @@ module TrainGame
   ( solve,
     findSolutions,
     buildRpn,
-    showRpn,
     solutions,
     RPN (Op, Num),
     OperatorType (Pl, Mi, Mu, Di)
   ) where
 
-import Data.List (permutations)
+import Data.List (permutations, sort, nub)
+import Data.Function (on)
 
 data OperatorType = Pl | Mi | Mu | Di deriving Eq
 instance Show OperatorType where
@@ -19,16 +19,21 @@ instance Show OperatorType where
   show Mu = " * "
   show Di = " / "
 
+associative :: OperatorType -> Bool
+associative (Pl) = True
+associative (Mu) = True
+associative _    = False
+
 data RPN = Op OperatorType | Num Integer
 
--- Allows us to show an RPN equation as a regular equation
-showRpn :: [RPN] -> String
-showRpn xs = showRpn' xs []
-  where
-    showRpn' :: [RPN] -> [String] -> String
-    showRpn' ((Num n):xs) st      = showRpn' xs ((show n):st)
-    showRpn' ((Op o):[]) (a:b:st) = b ++ show o ++ a
-    showRpn' ((Op o):xs) (a:b:st) = showRpn' xs (("(" ++ b ++ show o ++ a ++ ")"):st)
+data RTree = Node OperatorType RTree RTree 
+           | Leaf Integer 
+           deriving (Eq)
+
+instance Show RTree where
+  show (Node o t1 t2) = "(" ++ show t2 ++ show o ++ show t1 ++ ")"
+  show (Leaf i)       = show i
+
 
 operators :: [RPN] 
 operators = [Op Pl, Op Mi, Op Mu, Op Di]
@@ -39,8 +44,32 @@ mapOperator Mi = (-)
 mapOperator Mu = (*)
 mapOperator Di = quot
 
-solutions :: [Integer] -> [[RPN]]
-solutions xs = concat [ findSolutions $ buildRpn nums | nums <- permutations xs]
+toTree :: [RPN] -> RTree
+toTree xs = tt xs []
+  where
+    tt :: [RPN] -> [RTree] -> RTree
+    tt ((Num i):xs) ts       = tt xs ((Leaf i):ts)
+    tt ((Op o) :[]) (a:b:ts) = Node o a b
+    tt ((Op o) :xs) (a:b:ts) = tt xs ((Node o a b):ts)
+
+value :: RTree -> Integer
+value (Node o a b) = (mapOperator o) (value b) (value a)
+value (Leaf i) = i
+
+sortTree :: RTree -> RTree
+sortTree (Node o a b) | associative o 
+                      = if value a < value b then
+                          Node o (sortTree a) (sortTree b)
+                        else
+                          Node o (sortTree b) (sortTree a)
+sortTree (Node o a b) = Node o (sortTree a) (sortTree b)
+sortTree x = x
+
+solutions :: [Integer] -> [String]
+solutions xs = nub $ map show 
+             $ map sortTree
+             $ map toTree
+             $ concat [ findSolutions $ buildRpn nums | nums <- permutations xs ]
 
 buildRpn :: [Integer] -> [[RPN]]
 buildRpn xs = [ (Num first):(Num second):rpn | rpn <- buildRpn' (drop 2 xs) 2]
