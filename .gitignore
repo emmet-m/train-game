@@ -2,3 +2,5 @@
 train-game.cabal
 *~
 train-game-exe
+*.o
+*.hi
